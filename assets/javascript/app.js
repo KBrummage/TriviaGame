@@ -10,7 +10,7 @@ var index = -1;
 function startTheClock() {
 
     clearInterval(Timer);
-    var timeleft = 2;
+    var timeleft = 10;
     $("#timerDiv").html("");
     Timer = setInterval(function () {
         timeleft--;
@@ -34,7 +34,7 @@ function startTheClock() {
 
 
 $.ajax({
-    url: "http://opentdb.com/api_category.php",
+    url: "https://opentdb.com/api_category.php",
     method: "GET"
 }).then(function (response) {
     for (var i = 0; i < response.trivia_categories.length; i++) {
