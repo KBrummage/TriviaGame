@@ -7,6 +7,8 @@ var counter;
 var Timer;
 var questLeft;
 var index = -1;
+var outOfTime = false;
+
 function startTheClock() {
 
     clearInterval(Timer);
@@ -15,12 +17,13 @@ function startTheClock() {
     Timer = setInterval(function () {
         timeleft--;
         $("#timerDiv p").html(timeleft);
-        if (timeleft === 0){
+        if (timeleft === 0) {
             Wrong++;
             console.log(Wrong);
             console.log(questLeft);
             questLeft--;
             clearInterval(Timer);
+            outOfTime = true;
             $("#statDiv").html(`<div class="card" style = "width: 90%">
                             <div class="card-body">
                             <h3 class="card-title">Stats</h3>
@@ -34,46 +37,46 @@ function startTheClock() {
 
 
 $.ajax({
-    url: "https://opentdb.com/api_category.php",
-    method: "GET"
+url: "https://opentdb.com/api_category.php",
+method: "GET"
 }).then(function (response) {
-    for (var i = 0; i < response.trivia_categories.length; i++) {
-        var id = response.trivia_categories[i].id;
-        var cat = response.trivia_categories[i].name;
-        $("#categoryDropDown").append("<div class= 'dropdown-item dropCat' id ='" + id + " " + name + "'>" + cat + "</div>")
-    }
-    $(document).on("click", ".dropdown-item.dropCat", function () {
-        dropDownPick = this.id;
-        dropDownName = this.textContent;
+for (var i = 0; i < response.trivia_categories.length; i++) {
+var id = response.trivia_categories[i].id;
+var cat = response.trivia_categories[i].name;
+$("#categoryDropDown").append("<div class= 'dropdown-item dropCat' id ='" + id + " " + name + "'>" + cat + "</div>")
+}
+$(document).on("click", ".dropdown-item.dropCat", function () {
+dropDownPick = this.id;
+dropDownName = this.textContent;
 
 
-        $("#navbarDropdownCat").html(dropDownName);
+$("#navbarDropdownCat").html(dropDownName);
 
 
-        if ((dropDownAmount !== "") &&
-            (dropDownName !== "")) {
-            $("#goBtn").css({
-                "visibility": "visible"
-            });
-        }
-    })
-    $(".dropdown-item.dropQuest").click(function () {
-        dropDownAmount = this.id;
-        $("#navbarDropdownQuest").html(`${dropDownAmount} Questions`);
+if ((dropDownAmount !== "") &&
+    (dropDownName !== "")) {
+    $("#goBtn").css({
+        "visibility": "visible"
+    });
+}
+})
+$(".dropdown-item.dropQuest").click(function () {
+dropDownAmount = this.id;
+$("#navbarDropdownQuest").html(`${dropDownAmount} Questions`);
 
-        if ((dropDownAmount !== "") &&
-            (dropDownName !== "")) {
-            $("#goBtn").css({
-                "visibility": "visible"
-            });
-        }
-    })
+if ((dropDownAmount !== "") &&
+    (dropDownName !== "")) {
+    $("#goBtn").css({
+        "visibility": "visible"
+    });
+}
+})
 
-    $("#goBtn").click(function () {
-        $.ajax({
-            url: `https://opentdb.com/api.php?amount=${dropDownAmount}&category=${dropDownPick}`,
-            method: "GET"
-        }).then(function (response) {
+$("#goBtn").click(function () {
+    $.ajax({
+        url: `https://opentdb.com/api.php?amount=${dropDownAmount}&category=${dropDownPick}`,
+        method: "GET"
+    }).then(function (response) {
             //questLeft based on how many questions selected.
             questLeft = parseInt(dropDownAmount);
             console.log(questLeft);
@@ -82,6 +85,7 @@ $.ajax({
             $("#goBtn").fadeOut(2600);
 
             function getNextQuestion() {
+                outOfTime = false;
                 startTheClock();
                 index++;
 
@@ -134,7 +138,10 @@ $.ajax({
                 //on"click" if true, log that, if false, log that and replace that div with the next question.
                 $(".form-check-input").click(function () {
                     if (this.id === response.results[index].correct_answer) {
-                        Right++;
+                        if (outOfTime !== true) {
+                            Right++;
+                        }
+
 
                         $("#statDiv").html(`<div class="card" style = "width: 90%">
                         <div class="card-body">
@@ -149,96 +156,46 @@ $.ajax({
                             $("#statDiv").slideUp();
                             $("#QuestDiv").slideUp();
                             $("#timerDiv").slideUp();
-                            $(".jumbotron").slideDown();
-                            $("#navbarDropdownCat").html("Pick a Category");
-                            dropDownPick = "";
-                            $(document).on("click", ".dropdown-item.dropCat", function () {
-                                dropDownPick = this.id;
-                                dropDownName = this.textContent;
-
-
-                                $("#navbarDropdownCat").html(dropDownName);
-
-                                console.log(dropDownPick);
-                                console.log(dropDownAmount);
-                                console.log(dropDownName);
-                                if ((dropDownAmount !== "") &&
-                                    (dropDownName !== "")) {
-                                    $("#goBtn").css({
-                                        "visibility": "visible"
-                                    });
-                                }
-                            })
-                            $("#navbarDropdownQuest").html(`Choose Question Amount`);
-                            dropDownAmount = "";
-                            $(".dropdown-item.dropQuest").click(function () {
-                                dropDownAmount = this.id;
-                                $("#navbarDropdownQuest").html(`${dropDownAmount} Questions`);
-                                console.log(dropDownPick);
-                                console.log(dropDownAmount);
-                                console.log(dropDownName);
-                                if ((dropDownAmount !== "") &&
-                                    (dropDownName !== "")) {
-                                    $("#goBtn").css({
-                                        "visibility": "visible"
-                                    });
-                                }
-                            })
-
+                            $("#results").html(`<b>You scored ${Right} out of ${Right + Wrong} <br>
+                                                 for a total of ${(Right*100)/(Right+Wrong)}%</b>`);
 
                         }
-                    } else {
-                        Wrong++;
 
-                        $("#statDiv").html(`<div class="card" style = "width: 90%">
+
+
+                    }
+                 else if (this.id !== response.results[index].correct_answer) {
+                    if (outOfTime !== true) {
+                        Wrong++;
+                    }
+
+                    $("#statDiv").html(`<div class="card" style = "width: 90%">
                             <div class="card-body">
                             <h3 class="card-title">Stats</h3>
                             <p class="card-text">Right: ${Right}<br>
                                                  Wrong: ${Wrong}<br>
                                                  Questions Left: ${questLeft - 1}</p>`)
-                        questLeft--;
-                        if (questLeft !== 0) {
-                            getNextQuestion();
-                        } else {
-                            $("#statDiv").slideUp();
-                            $("#QuestDiv").slideUp();
-                            $("#timerDiv").slideUp();
-                            $(".jumbotron").slideDown();
-                            $("#navbarDropdownCat").html("Pick a Category");
-                            dropDownPick = "";
-                            $(document).on("click", ".dropdown-item.dropCat", function () {
-                                dropDownPick = this.id;
-                                dropDownName = this.textContent;
+                    questLeft--;
+                    if (questLeft !== 0) {
+                        getNextQuestion();
+                    } else {
+                        $("#statDiv").slideUp();
+                        $("#QuestDiv").slideUp();
+                        $("#timerDiv").slideUp();
+                        $("#results").html(`<b>You scored ${Right} out of ${Right + Wrong} <br>
+                                                 for a total of ${(Right*100)/(Right+Wrong)}%</b>`);
 
-
-                                $("#navbarDropdownCat").html(dropDownName);
-
-
-                                if ((dropDownAmount !== "") &&
-                                    (dropDownName !== "")) {
-                                    $("#goBtn").fadeIn(2600);
-                                }
-                            })
-                            $("#navbarDropdownQuest").html(`Choose Question Amount`);
-                            dropDownAmount = "";
-                            $(".dropdown-item.dropQuest").click(function () {
-                                dropDownAmount = this.id;
-                                $("#navbarDropdownQuest").html(`${dropDownAmount} Questions`);
-
-                                if ((dropDownAmount !== "") &&
-                                    (dropDownName !== "")) {
-                                    $("#goBtn").fadeIn(2600);
-                                }
-                            })
-
-                        }
                     }
-
+                }
                 })
+
             }
 
-
         })
-    })
+
+
+
+
+})
 
 })
