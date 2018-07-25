@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!--Boostrap JS Script-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+    <!--ajax Script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--JS Script-->
+    <script src="assets/javascript/app.js"></script>
+    <title>Trivia Page</title>
+</head>
+
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navbar-brand" href="#">Trivia Tonight!</div>
+        
+    </nav>
+    <div class="container-fluid">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome To Trivia Night!</h1>
+
+            <hr class="my-4">
+            <p>
+                <b>Pick your Category, Choose how many Questions</b>:
+                <br>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownCat" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">Pick a Category</a>
+                    <div id="categoryDropDown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!--stuff goes here-->
+                        <div class="dropdown-divider"></div>
+                    </div>
+                </div>
+                <br>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuest" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">Choose Question Amount</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-item dropQuest" id="10">10 Questions</div>
+                        <div class="dropdown-item dropQuest" id="20">20 Questions</div>
+                        <div class="dropdown-item dropQuest" id="30">30 Questions</div>
+                        <div class="dropdown-item dropQuest" id="40">40 Questions</div>
+                        <div class="dropdown-item dropQuest" id="50">50 Questions</div>
+
+                    </div>
+                </div>
+                
+                <button type="button" id="goBtn" class="btn btn-primary btn-lg">Let's Go!</button> 
+                
+            </p>
+
+        </div>
+        <div class="container-fluid">
+            <div class="row" id="results">
+            </div>
+            <div class="row">
+                <div class="col-sm-4" id="QuestDiv"></div>
+                <div class="col-sm-4" id="statDiv"></div>
+                <div class="col-sm-4" id="timerDiv">Beat the Clock!</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
